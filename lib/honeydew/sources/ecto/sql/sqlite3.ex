@@ -88,8 +88,8 @@ if Code.ensure_loaded?(Ecto) do
     @impl true
     def reset_stale(state) do
       "UPDATE #{state.table}
-      SET #{state.lock_field} = DEFAULT,
-          #{state.private_field} = DEFAULT
+      SET #{state.lock_field} = #{ready()},
+          #{state.private_field} = #{ready()}
       WHERE
           #{stale_at()} < #{state.lock_field}
           AND
