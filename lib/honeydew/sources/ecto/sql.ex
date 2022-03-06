@@ -4,6 +4,7 @@ defmodule Honeydew.EctoSource.SQL do
   alias Honeydew.EctoSource.State
   alias Honeydew.EctoSource.SQL.Cockroach
   alias Honeydew.EctoSource.SQL.Postgres
+  alias Honeydew.EctoSource.SQL.SQLite3
 
   #
   # you might be wondering "what's all this shitty sql for?", it's to make sure that the database is sole arbiter of "now",
@@ -14,7 +15,7 @@ defmodule Honeydew.EctoSource.SQL do
   @type msecs :: integer()
   @type repo :: module()
   @type override :: :cockroachdb | nil
-  @type sql_module :: Postgres | Cockroach
+  @type sql_module :: Postgres | Cockroach | SQLite3
   @type filter :: atom
 
   @callback integer_type :: atom()
@@ -37,6 +38,9 @@ defmodule Honeydew.EctoSource.SQL do
         case repo.__adapter__() do
           Ecto.Adapters.Postgres ->
             Postgres
+
+          Ecto.Adapters.SQLite3 ->
+            SQLite3
 
           unsupported ->
             raise ArgumentError, unsupported_adapter_error(unsupported)
